@@ -13,11 +13,19 @@ export class JwtService {
     }
     return header.split(' ')[1];
   }
+
   private decodeToken(token: string) {
-    return jwt.verify(
-      token,
-      process.env.JWT_REFRESH_SECRET || 'refresh_secret',
-    );
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_REFRESH_SECRET || 'refresh_secret',
+      );
+      console.log(decoded);
+      return decoded;
+    } catch (error) {
+      console.log(error);
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   private async revokeToken(token: string) {

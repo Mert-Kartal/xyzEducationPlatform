@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDto, UpdateUserDto } from '../dto';
-import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -28,8 +27,6 @@ export class UserService {
     if (user) {
       throw new ConflictException('User already exists');
     }
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    data.password = hashedPassword;
     return this.userRepository.create(data);
   }
 
