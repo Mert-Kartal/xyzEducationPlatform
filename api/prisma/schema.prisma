@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OptionLabel {
+  A
+  B
+  C
+  D
+  NONE
+}
+
+enum Role {
+  Student
+  Professor
+  Assistant
+  Admin
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  role     Role    @default(Student)
+  field    String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  Token  Token[]
+  Answer Answer[]
+
+  @@map("users")
+}
+
+model Question {
+  id         String      @id @default(uuid())
+  content    String
+  optionType OptionLabel
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  options Option[]
+  tests   TestQuestion[]
+  Answer  Answer[]
+
+  @@map("questions")
+}
+
+model Option {
+  id         String  @id @default(uuid())
+  questionId String
+  optionText String
+  isCorrect  Boolean @default(false)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  question Question @relation(fields: [questionId], references: [id])
+  answers  Answer[]
+
+  @@map("options")
+}
+
+model Test {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  questions TestQuestion[]
+  answers   Answer[]
+
+  @@map("tests")
+}
+
+model TestQuestion {
+  id String @id @default(uuid())
+
+  testId     String
+  questionId String
+
+  Question Question @relation(fields: [questionId], references: [id])
+  Test     Test     @relation(fields: [testId], references: [id])
+
+  @@map("test_questions")
+}
+
+model Answer {
+  id         String      @id @default(uuid())
+  userId     String
+  testId     String
+  questionId String
+  optionId   String
+  answer     OptionLabel
+  isCorrect  Boolean     @default(false)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  User     User     @relation(fields: [userId], references: [id])
+  Question Question @relation(fields: [questionId], references: [id])
+  Option   Option   @relation(fields: [optionId], references: [id])
+  Test     Test     @relation(fields: [testId], references: [id])
+
+  @@map("answers")
+}
+
+model Token {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("tokens")
+}
