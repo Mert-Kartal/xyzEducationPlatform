@@ -47,10 +47,15 @@ export class JwtService {
       throw new UnauthorizedException('Token has been revoked');
     }
 
-    await this.prisma.token.update({
-      where: { id: tokenInfo.id },
-      data: { revokedAt: new Date() },
-    });
+    try {
+      await this.prisma.token.update({
+        where: { id: tokenInfo.id },
+        data: { revokedAt: new Date() },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 
   generateAccess(userId: string, role: string) {
