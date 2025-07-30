@@ -1,6 +1,7 @@
+import { Role } from '@prisma/client';
 export interface TokenPayload {
   userId: string;
-  role: string;
+  role: Role;
   jti?: string;
 }
 declare global {
