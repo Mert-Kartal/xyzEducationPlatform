@@ -62,11 +62,10 @@ model User {
 }
 
 model Question {
-  id         String      @id @default(uuid())
-  content    String
-  optionType OptionLabel
-  field      Field
-  authorId   String      @map("author_id")
+  id       String @id @default(uuid())
+  content  String
+  field    Field
+  authorId String @map("author_id")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -81,10 +80,11 @@ model Question {
 }
 
 model Option {
-  id         String  @id @default(uuid())
+  id         String      @id @default(uuid())
   questionId String
   optionText String
-  isCorrect  Boolean @default(false)
+  optionType OptionLabel
+  isCorrect  Boolean     @default(false)
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")

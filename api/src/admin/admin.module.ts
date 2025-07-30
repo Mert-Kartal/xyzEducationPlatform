@@ -9,6 +9,4 @@ import { AdminService } from './admin.service';
   controllers: [AdminController],
   providers: [AdminService],
 })
-export class AdminModule {
-  constructor(private readonly adminService: AdminService) {}
-}
+export class AdminModule {}
