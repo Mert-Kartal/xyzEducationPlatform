@@ -15,7 +15,7 @@ import { JwtGuard, RoleGuard, Roles } from '../shared';
 import { Role } from '@prisma/client';
 import { Request } from 'express';
 
-@Controller('question')
+@Controller('questions')
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
 

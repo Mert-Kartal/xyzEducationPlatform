@@ -47,4 +47,10 @@ export class AdminController {
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.deleteUser(id);
   }
+
+  // Question
+  @Delete('questions/:id')
+  async deleteQuestion(@Param('id', ParseUUIDPipe) id: string) {
+    return this.adminService.deleteQuestion(id);
+  }
 }

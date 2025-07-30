@@ -52,6 +52,7 @@ export class JwtService {
         where: { id: tokenInfo.id },
         data: { revokedAt: new Date() },
       });
+      return decoded;
     } catch (error) {
       console.log(error);
       throw new UnauthorizedException('Invalid token');
@@ -115,9 +116,7 @@ export class JwtService {
   async refresh(header: string) {
     const token = this.extractTokenFromHeader(header);
 
-    await this.revokeToken(token);
-
-    const decoded = this.decodeToken(token) as TokenPayload;
+    const decoded = await this.revokeToken(token);
 
     const { accessToken, refreshToken } = await this.generateTokenPair(decoded);
 
