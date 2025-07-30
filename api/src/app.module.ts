@@ -8,7 +8,7 @@ import { JwtModule } from './jwt';
 import { AuthModule } from './auth';
 import { SharedModule } from './shared';
 import { AdminModule } from './admin';
-
+import { QuestionModule } from './question';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +20,7 @@ import { AdminModule } from './admin';
     AuthModule,
     SharedModule,
     AdminModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

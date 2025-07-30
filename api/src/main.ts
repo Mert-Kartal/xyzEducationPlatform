@@ -11,6 +11,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') ?? 3000;
   app.setGlobalPrefix('api');

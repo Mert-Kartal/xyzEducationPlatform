@@ -12,7 +12,7 @@ import {
 import { JwtGuard, RoleGuard, Roles } from '../shared';
 import { Role } from '@prisma/client';
 import { AdminService } from './admin.service';
-import { CreateUserDto, UpdateAdminDto } from 'src/dto';
+import { CreateUserDto, UpdateAdminDto } from '../dto';
 
 @UseGuards(JwtGuard, RoleGuard)
 @Roles(Role.Admin)
