@@ -40,18 +40,18 @@ export class UserService {
 
   async update(id: string, data: UpdateUserDto | UpdateAdminDto) {
     await this.checkById(id);
+    if (Object.keys(data).length === 0) {
+      throw new BadRequestException('No data to update');
+    }
 
     if (data.email) {
       const existEmail = await this.checkByEmail(data.email);
-      if (existEmail) {
-        if (existEmail.id !== id) {
-          throw new BadRequestException('Can not change email with same email');
-        }
+      if (existEmail && existEmail.id !== id) {
         throw new ConflictException('Email already exists');
       }
     }
 
-    return this.userRepository.update(id, data);
+    return this.userRepository.update(id, data as UpdateUserDto);
   }
 
   async delete(id: string) {

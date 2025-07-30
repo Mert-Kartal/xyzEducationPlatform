@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Field, Role } from '@prisma/client';
 import {
   IsEmail,
   IsEnum,
@@ -21,13 +21,14 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @IsEnum(Role)
   role: Role;
 
   @IsString()
-  @IsOptional()
-  field: string;
+  @IsNotEmpty()
+  @IsEnum(Field)
+  field: Field;
 }
 
 export class UpdateUserDto {
@@ -38,6 +39,11 @@ export class UpdateUserDto {
   @IsEmail()
   @IsOptional()
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  @IsEnum(Field)
+  field?: Field;
 }
 
 export class UpdateAdminDto {
@@ -51,9 +57,11 @@ export class UpdateAdminDto {
 
   @IsString()
   @IsOptional()
+  @IsEnum(Role)
   role?: Role;
 
   @IsString()
   @IsOptional()
-  field?: string;
+  @IsEnum(Field)
+  field?: Field;
 }

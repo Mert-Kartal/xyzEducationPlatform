@@ -15,8 +15,6 @@ export class AuthService {
     const user = await this.userService.add({
       ...data,
       password: hashedPassword,
-      role: 'Student',
-      field: 'Computer Science',
     } as CreateUserDto);
     const { accessToken, refreshToken } =
       await this.jwtService.generateTokenPair({

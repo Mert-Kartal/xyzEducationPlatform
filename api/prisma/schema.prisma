@@ -28,13 +28,21 @@ enum Role {
   Admin
 }
 
+enum Field {
+  ComputerScience
+  Mathematics
+  Physics
+  Chemistry
+  Biology
+}
+
 model User {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
-  email    String  @unique
+  email    String @unique
   password String
-  role     Role    @default(Student)
-  field    String?
+  role     Role   @default(Student)
+  field    Field
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
