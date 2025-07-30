@@ -1,0 +1,34 @@
+import { Injectable } from '@nestjs/common';
+import { CreateUserDto, UpdateAdminDto } from '../dto';
+import { UserService } from '../user';
+import * as bcrypt from 'bcrypt';
+
+@Injectable()
+export class AdminService {
+  constructor(private readonly userService: UserService) {}
+
+  async createUser(data: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const user = await this.userService.add({
+      ...data,
+      password: hashedPassword,
+    } as CreateUserDto);
+    return user;
+  }
+
+  async listUsers() {
+    return this.userService.list();
+  }
+
+  async showUser(id: string) {
+    return this.userService.show(id);
+  }
+
+  async updateUser(id: string, data: UpdateAdminDto) {
+    return this.userService.update(id, data);
+  }
+
+  async deleteUser(id: string) {
+    return this.userService.delete(id);
+  }
+}

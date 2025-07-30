@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { CreateUserDto, UpdateUserDto } from '../dto';
+import { CreateUserDto, UpdateAdminDto, UpdateUserDto } from '../dto';
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -38,7 +38,7 @@ export class UserService {
     return this.checkById(id);
   }
 
-  async update(id: string, data: UpdateUserDto) {
+  async update(id: string, data: UpdateUserDto | UpdateAdminDto) {
     await this.checkById(id);
 
     if (data.email) {

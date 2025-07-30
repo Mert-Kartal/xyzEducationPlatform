@@ -39,3 +39,21 @@ export class UpdateUserDto {
   @IsOptional()
   email?: string;
 }
+
+export class UpdateAdminDto {
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  role?: Role;
+
+  @IsString()
+  @IsOptional()
+  field?: string;
+}

@@ -12,6 +12,10 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  field: string;
 }
 
 export class LoginDto {

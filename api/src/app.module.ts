@@ -7,6 +7,7 @@ import { UserModule } from './user';
 import { JwtModule } from './jwt';
 import { AuthModule } from './auth';
 import { SharedModule } from './shared/shared.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
     JwtModule,
     AuthModule,
     SharedModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
