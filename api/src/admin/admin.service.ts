@@ -2,11 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateAdminDto } from '../dto';
 import { UserService } from '../user';
 import * as bcrypt from 'bcrypt';
-
+import { QuestionService } from '../question';
 @Injectable()
 export class AdminService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly questionService: QuestionService,
+  ) {}
 
+  // User
   async createUser(data: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const user = await this.userService.add({
@@ -30,5 +34,10 @@ export class AdminService {
 
   async deleteUser(id: string) {
     return this.userService.delete(id);
+  }
+
+  // Question
+  async deleteQuestion(id: string) {
+    return this.questionService.remove(id);
   }
 }
