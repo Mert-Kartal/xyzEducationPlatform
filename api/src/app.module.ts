@@ -6,8 +6,8 @@ import { PrismaModule } from './prisma';
 import { UserModule } from './user';
 import { JwtModule } from './jwt';
 import { AuthModule } from './auth';
-import { SharedModule } from './shared/shared.module';
-import { AdminModule } from './admin/admin.module';
+import { SharedModule } from './shared';
+import { AdminModule } from './admin';
 
 @Module({
   imports: [
