@@ -30,10 +30,15 @@ enum Role {
 
 enum Field {
   ComputerScience
+  DataScience
+  Frontend
+  Backend
+  FullStack
+  CyberSecurity
+  AI
+  GameDevelopment
   Mathematics
   Physics
-  Chemistry
-  Biology
 }
 
 model User {
@@ -48,8 +53,10 @@ model User {
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  Token  Token[]
-  Answer Answer[]
+  Token    Token[]
+  Answer   Answer[]
+  Question Question[]
+  Test     Test[]
 
   @@map("users")
 }
@@ -58,6 +65,8 @@ model Question {
   id         String      @id @default(uuid())
   content    String
   optionType OptionLabel
+  field      Field
+  authorId   String      @map("author_id")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -66,6 +75,7 @@ model Question {
   options Option[]
   tests   TestQuestion[]
   Answer  Answer[]
+  Author  User           @relation(fields: [authorId], references: [id])
 
   @@map("questions")
 }
@@ -88,6 +98,8 @@ model Option {
 
 model Test {
   id          String  @id @default(uuid())
+  authorId    String  @map("author_id")
+  field       Field
   title       String
   description String?
 
@@ -97,6 +109,7 @@ model Test {
 
   questions TestQuestion[]
   answers   Answer[]
+  Author    User           @relation(fields: [authorId], references: [id])
 
   @@map("tests")
 }
