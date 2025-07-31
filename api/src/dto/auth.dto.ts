@@ -1,31 +1,39 @@
 import { Field } from '@prisma/client';
-import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterDto {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
+  @MinLength(2)
   name: string;
 
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
   password: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @IsEnum(Field)
   field: Field;
 }
 
 export class LoginDto {
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   password: string;
 }

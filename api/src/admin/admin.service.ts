@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateAdminDto } from '../dto';
 import { UserService } from '../user';
 import * as bcrypt from 'bcrypt';
-import { QuestionService } from '../question';
+import { OptionService, QuestionService } from '../question';
 @Injectable()
 export class AdminService {
   constructor(
     private readonly userService: UserService,
     private readonly questionService: QuestionService,
+    private readonly optionService: OptionService,
   ) {}
 
   // User
@@ -39,5 +40,10 @@ export class AdminService {
   // Question
   async deleteQuestion(id: string) {
     return this.questionService.remove(id);
+  }
+
+  // Options
+  async deleteOption(id: string, optionId: string) {
+    return this.optionService.remove(id, optionId);
   }
 }

@@ -5,10 +5,17 @@ import { QuestionRepository } from './question.repository';
 import { PrismaModule } from '../prisma';
 import { SharedModule } from '../shared';
 import { UserModule } from '../user';
+import { OptionRepository, OptionService } from './option';
+
 @Module({
   imports: [PrismaModule, SharedModule, UserModule],
-  providers: [QuestionService, QuestionRepository],
+  providers: [
+    QuestionService,
+    QuestionRepository,
+    OptionRepository,
+    OptionService,
+  ],
   controllers: [QuestionController],
-  exports: [QuestionService],
+  exports: [QuestionService, OptionService],
 })
 export class QuestionModule {}

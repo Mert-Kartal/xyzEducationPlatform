@@ -5,63 +5,66 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MinLength,
 } from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   password: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @IsEnum(Role)
   role: Role;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @IsEnum(Field)
   field: Field;
 }
 
 export class UpdateUserDto {
-  @IsString()
   @IsOptional()
+  @IsString()
+  @MinLength(2)
   name?: string;
 
-  @IsEmail()
   @IsOptional()
+  @IsEmail()
   email?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   @IsEnum(Field)
   field?: Field;
 }
 
 export class UpdateAdminDto {
-  @IsString()
   @IsOptional()
+  @IsString()
+  @MinLength(2)
   name?: string;
 
-  @IsEmail()
   @IsOptional()
+  @IsEmail()
   email?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   @IsEnum(Role)
   role?: Role;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   @IsEnum(Field)
   field?: Field;
 }

@@ -13,14 +13,23 @@ import {
   ParseEnumPipe,
 } from '@nestjs/common';
 import { QuestionService } from './question.service';
-import { CreateQuestionDto, UpdateQuestionDto } from '../dto';
+import {
+  CreateOptionDto,
+  CreateQuestionDto,
+  UpdateOptionDto,
+  UpdateQuestionDto,
+} from '../dto';
 import { JwtGuard, RoleGuard, Roles } from '../shared';
+import { OptionService } from './option';
 import { Field, Role } from '@prisma/client';
 import { Request } from 'express';
 
 @Controller('questions')
 export class QuestionController {
-  constructor(private readonly questionService: QuestionService) {}
+  constructor(
+    private readonly questionService: QuestionService,
+    private readonly optionService: OptionService,
+  ) {}
 
   @UseGuards(JwtGuard, RoleGuard)
   @Roles(Role.Professor)
@@ -73,5 +82,40 @@ export class QuestionController {
     @Req() req: Request,
   ) {
     return this.questionService.remove(id, req.user.userId);
+  }
+
+  //options
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Post(':id/options')
+  async createOption(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: CreateOptionDto,
+    @Req() req: Request,
+  ) {
+    return this.optionService.add(id, data, req.user.userId);
+  }
+
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Patch(':id/options/:optionId')
+  async updateOption(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('optionId', ParseUUIDPipe) optionId: string,
+    @Body() data: UpdateOptionDto,
+    @Req() req: Request,
+  ) {
+    return this.optionService.edit(id, optionId, req.user.userId, data);
+  }
+
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Delete(':id/options/:optionId')
+  async deleteOption(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('optionId', ParseUUIDPipe) optionId: string,
+    @Req() req: Request,
+  ) {
+    return this.optionService.remove(id, optionId, req.user.userId);
   }
 }

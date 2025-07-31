@@ -81,14 +81,13 @@ model Question {
 
 model Option {
   id         String      @id @default(uuid())
-  questionId String
-  optionText String
-  optionType OptionLabel
-  isCorrect  Boolean     @default(false)
+  questionId String      @map("question_id")
+  optionText String      @map("option_text")
+  optionType OptionLabel @map("option_type")
+  isCorrect  Boolean     @default(false) @map("is_correct")
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   question Question @relation(fields: [questionId], references: [id])
   answers  Answer[]
@@ -117,8 +116,8 @@ model Test {
 model TestQuestion {
   id String @id @default(uuid())
 
-  testId     String
-  questionId String
+  testId     String @map("test_id")
+  questionId String @map("question_id")
 
   Question Question @relation(fields: [questionId], references: [id])
   Test     Test     @relation(fields: [testId], references: [id])
@@ -128,10 +127,10 @@ model TestQuestion {
 
 model Answer {
   id         String      @id @default(uuid())
-  userId     String
-  testId     String
-  questionId String
-  optionId   String
+  userId     String      @map("user_id")
+  testId     String      @map("test_id")
+  questionId String      @map("question_id")
+  optionId   String      @map("option_id")
   answer     OptionLabel
   isCorrect  Boolean     @default(false)
 
@@ -140,7 +139,7 @@ model Answer {
 
   User     User     @relation(fields: [userId], references: [id])
   Question Question @relation(fields: [questionId], references: [id])
-  Option   Option   @relation(fields: [optionId], references: [id])
+  Option   Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
   Test     Test     @relation(fields: [testId], references: [id])
 
   @@map("answers")

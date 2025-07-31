@@ -24,6 +24,9 @@ export class QuestionRepository {
   async find(id: string) {
     return this.prisma.question.findUnique({
       where: { id },
+      include: {
+        options: true,
+      },
     });
   }
 

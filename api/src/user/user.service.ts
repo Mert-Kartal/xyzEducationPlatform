@@ -44,7 +44,10 @@ export class UserService {
 
   async update(id: string, data: UpdateUserDto | UpdateAdminDto) {
     await this.checkById(id);
-    if (Object.keys(data).length === 0) {
+    if (
+      Object.keys(data).length === 0 ||
+      Object.values(data).every((value) => value === undefined)
+    ) {
       throw new BadRequestException('No data to update');
     }
 
