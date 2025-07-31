@@ -31,7 +31,11 @@ export class UserService {
   }
 
   async list() {
-    return this.userRepository.index();
+    const users = await this.userRepository.index();
+    if (users.length === 0) {
+      throw new NotFoundException('No users found');
+    }
+    return users;
   }
 
   async show(id: string) {

@@ -27,6 +27,22 @@ export class QuestionRepository {
     });
   }
 
+  async search(field: Field) {
+    return this.prisma.question.findMany({
+      where: {
+        field,
+      },
+    });
+  }
+
+  async searchByAuthor(authorId: string) {
+    return this.prisma.question.findMany({
+      where: {
+        authorId,
+      },
+    });
+  }
+
   async update(id: string, data: UpdateQuestionDto) {
     return this.prisma.question.update({
       where: { id },

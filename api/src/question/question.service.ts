@@ -6,6 +6,7 @@ import {
 import { QuestionRepository } from './question.repository';
 import { UserService } from '../user';
 import { CreateQuestionDto, UpdateQuestionDto } from '../dto';
+import { Field } from '@prisma/client';
 @Injectable()
 export class QuestionService {
   constructor(
@@ -26,11 +27,31 @@ export class QuestionService {
   }
 
   async list() {
-    return this.questionRepository.index();
+    const questions = await this.questionRepository.index();
+    if (questions.length === 0) {
+      throw new NotFoundException('No questions found');
+    }
+    return questions;
   }
 
   async show(id: string) {
     return this.checkById(id);
+  }
+
+  async search(field: Field) {
+    const questions = await this.questionRepository.search(field);
+    if (questions.length === 0) {
+      throw new NotFoundException('No questions found');
+    }
+    return questions;
+  }
+
+  async searchByAuthor(authorId: string) {
+    const questions = await this.questionRepository.searchByAuthor(authorId);
+    if (questions.length === 0) {
+      throw new NotFoundException('No questions found for this author');
+    }
+    return questions;
   }
 
   async edit(userId: string, id: string, data: UpdateQuestionDto) {
