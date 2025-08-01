@@ -59,4 +59,25 @@ export class TestRepository {
       },
     });
   }
+
+  async findQuestion(testId: string, questionId: string) {
+    return this.prisma.testQuestion.findUnique({
+      where: { testId_questionId: { testId, questionId } },
+    });
+  }
+
+  async addQuestion(testId: string, questionId: string) {
+    return this.prisma.testQuestion.create({
+      data: {
+        testId,
+        questionId,
+      },
+    });
+  }
+
+  async removeQuestion(testId: string, questionId: string) {
+    return this.prisma.testQuestion.delete({
+      where: { testId_questionId: { testId, questionId } },
+    });
+  }
 }

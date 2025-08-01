@@ -37,6 +37,16 @@ export class TestService {
     return tests;
   }
 
+  private async checkQuestion(testId: string, questionId: string) {
+    await this.checkById(testId);
+    await this.questionService.show(questionId);
+    const testQuestion = await this.testRepository.findQuestion(
+      testId,
+      questionId,
+    );
+    return testQuestion ? testQuestion : null;
+  }
+
   async add(userId: string, createTestDto: CreateTestDto) {
     const user = await this.userService.show(userId);
     const test = await this.testRepository.create(
@@ -82,5 +92,21 @@ export class TestService {
     }
     await this.testRepository.delete(id);
     return { message: 'Test deleted successfully' };
+  }
+
+  async addQuestion(testId: string, questionId: string) {
+    const testQuestion = await this.checkQuestion(testId, questionId);
+    if (testQuestion) {
+      throw new BadRequestException('Question already in test');
+    }
+    return this.testRepository.addQuestion(testId, questionId);
+  }
+
+  async removeQuestion(testId: string, questionId: string) {
+    const testQuestion = await this.checkQuestion(testId, questionId);
+    if (!testQuestion) {
+      throw new NotFoundException('Question not found in test');
+    }
+    return this.testRepository.removeQuestion(testId, questionId);
   }
 }

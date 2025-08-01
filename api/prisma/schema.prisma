@@ -122,6 +122,7 @@ model TestQuestion {
   Question Question @relation(fields: [questionId], references: [id])
   Test     Test     @relation(fields: [testId], references: [id])
 
+  @@unique([testId, questionId])
   @@map("test_questions")
 }
 

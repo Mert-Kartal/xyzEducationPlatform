@@ -64,6 +64,26 @@ export class TestController {
   @Roles(Role.Professor)
   @Delete(':id')
   async delete(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {
-    return this.testService.delete(id, req.user.userId || undefined);
+    return this.testService.delete(id, req.user.userId);
+  }
+
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Post(':id/questions/:questionId')
+  async addQuestion(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('questionId', ParseUUIDPipe) questionId: string,
+  ) {
+    return this.testService.addQuestion(id, questionId);
+  }
+
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Delete(':id/questions/:questionId')
+  async removeQuestion(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('questionId', ParseUUIDPipe) questionId: string,
+  ) {
+    return this.testService.removeQuestion(id, questionId);
   }
 }
