@@ -44,7 +44,17 @@ export class AnswerService {
       throw new BadRequestException('You have already answered this test');
     }
 
-    //TODO Add atomicity questionId tekrarı dğzelt ve questionId optionId kontrolü
+    const repeatedQuestions = data.answers.some((answer, index) =>
+      data.answers.some(
+        (otherAnswer, otherIndex) =>
+          answer.questionId === otherAnswer.questionId && index !== otherIndex,
+      ),
+    );
+
+    if (repeatedQuestions) {
+      throw new BadRequestException('QuestionId cannot be repeated');
+    }
+
     for (const answer of data.answers) {
       await this.questionService.show(answer.questionId);
 
