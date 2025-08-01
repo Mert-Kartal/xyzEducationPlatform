@@ -4,6 +4,7 @@ import { UserService } from '../user';
 import * as bcrypt from 'bcrypt';
 import { OptionService, QuestionService } from '../question';
 import { TestService } from '../test';
+import { AnswerService } from '../test/answer';
 @Injectable()
 export class AdminService {
   constructor(
@@ -11,6 +12,7 @@ export class AdminService {
     private readonly questionService: QuestionService,
     private readonly optionService: OptionService,
     private readonly testService: TestService,
+    private readonly answerService: AnswerService,
   ) {}
 
   // User
@@ -52,5 +54,18 @@ export class AdminService {
   // Test
   async deleteTest(id: string) {
     return this.testService.delete(id);
+  }
+
+  // Answer
+  async showAnswer(userId: string, testId: string) {
+    return this.answerService.show(userId, testId);
+  }
+
+  async showAllAnswers(testId: string) {
+    return this.answerService.findByTestId(testId);
+  }
+
+  async showAllAnswersByUserId(userId: string) {
+    return this.answerService.findByUserId(userId);
   }
 }

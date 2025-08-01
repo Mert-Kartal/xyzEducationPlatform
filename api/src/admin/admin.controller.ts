@@ -68,4 +68,23 @@ export class AdminController {
   async deleteTest(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.deleteTest(id);
   }
+
+  // Answer
+  @Get('tests/:testId/answers/:userId')
+  async showAnswer(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Param('testId', ParseUUIDPipe) testId: string,
+  ) {
+    return this.adminService.showAnswer(userId, testId);
+  }
+
+  @Get('tests/:testId/answers')
+  async showAllAnswers(@Param('testId', ParseUUIDPipe) testId: string) {
+    return this.adminService.showAllAnswers(testId);
+  }
+
+  @Get('/tests/users/:userId/answers')
+  async showAllAnswersByUserId(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.adminService.showAllAnswersByUserId(userId);
+  }
 }

@@ -13,14 +13,18 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { TestService } from './test.service';
-import { CreateTestDto, UpdateTestDto } from '../dto';
+import { AnswerService } from './answer';
+import { CreateTestDto, SubmitAnswersDto, UpdateTestDto } from '../dto';
 import { JwtGuard, RoleGuard, Roles } from '../shared';
 import { Field, Role } from '@prisma/client';
 import { Request } from 'express';
 
 @Controller('tests')
 export class TestController {
-  constructor(private readonly testService: TestService) {}
+  constructor(
+    private readonly testService: TestService,
+    private readonly answerService: AnswerService,
+  ) {}
 
   @UseGuards(JwtGuard, RoleGuard)
   @Roles(Role.Professor)
@@ -85,5 +89,54 @@ export class TestController {
     @Param('questionId', ParseUUIDPipe) questionId: string,
   ) {
     return this.testService.removeQuestion(id, questionId);
+  }
+
+  //answer
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Student)
+  @Post(':id/answers')
+  async addAnswers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request,
+    @Body() answers: SubmitAnswersDto,
+  ) {
+    return this.answerService.add(req.user.userId, id, answers);
+  }
+
+  //öğrencinin çözdüğü testleri görmesi
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Student)
+  @Get('/answers/solved')
+  async getSolvedAnswers(@Req() req: Request) {
+    return this.answerService.findByUserId(req.user.userId);
+  }
+
+  //profesör o testi çözen her öğrenciyi görmesi
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Get(':id/answers/all')
+  async getAllTestAnswers(@Param('id', ParseUUIDPipe) id: string) {
+    return this.answerService.findByTestId(id);
+  }
+
+  //öğrencinin çözdüğü testin cevaplarını görmesi
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Student)
+  @Get(':id/answers')
+  async getAnswers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request,
+  ) {
+    return this.answerService.show(req.user.userId, id);
+  }
+  //profesör öğrencinin cevaplarını görmesi
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
+  @Get(':id/answers/:userId')
+  async getAnswersByUserId(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ) {
+    return this.answerService.show(userId, id);
   }
 }

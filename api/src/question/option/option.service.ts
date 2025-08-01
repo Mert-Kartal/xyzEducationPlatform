@@ -18,7 +18,7 @@ export class OptionService {
     private readonly questionService: QuestionService,
   ) {}
 
-  private async showOption(questionId: string, optionId: string) {
+  async show(questionId: string, optionId: string) {
     const option = await this.optionRepository.show(questionId, optionId);
     if (!option) {
       throw new NotFoundException('Option not found');
@@ -152,7 +152,7 @@ export class OptionService {
   ) {
     const question = await this.questionService.show(questionId);
     this.checkAuthor(question, userId);
-    await this.showOption(questionId, optionId);
+    await this.show(questionId, optionId);
 
     if (Object.values(data).every((value) => value === undefined)) {
       throw new BadRequestException('No data provided');
@@ -176,7 +176,7 @@ export class OptionService {
     if (userId) {
       this.checkAuthor(question, userId);
     }
-    await this.showOption(questionId, optionId);
+    await this.show(questionId, optionId);
     await this.optionRepository.delete(questionId, optionId);
     return {
       message: 'Option deleted successfully',

@@ -6,10 +6,11 @@ import { QuestionModule } from '../question';
 import { UserModule } from '../user';
 import { PrismaModule } from '../prisma';
 import { SharedModule } from '../shared';
+import { AnswerService, AnswerRepository } from './answer';
 @Module({
   imports: [QuestionModule, UserModule, PrismaModule, SharedModule],
-  providers: [TestService, TestRepository],
+  providers: [TestService, TestRepository, AnswerService, AnswerRepository],
   controllers: [TestController],
-  exports: [TestService],
+  exports: [TestService, AnswerService],
 })
 export class TestModule {}
