@@ -106,7 +106,7 @@ export class AnswerService {
 
     return {
       answers,
-      correctAnswerRate,
+      message: `You have answered ${correctAnswerCount} questions correctly out of ${totalQuestionCount} questions. Your correct answer rate is ${correctAnswerRate}%`,
     };
   }
 
