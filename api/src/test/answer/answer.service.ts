@@ -57,6 +57,13 @@ export class AnswerService {
 
     for (const answer of data.answers) {
       await this.questionService.show(answer.questionId);
+      const existQuestionInTest = await this.testService.checkQuestion(
+        testId,
+        answer.questionId,
+      );
+      if (!existQuestionInTest) {
+        throw new BadRequestException('Question not found in test');
+      }
 
       let optionTypeToSave: OptionLabel = OptionLabel.NONE;
       let isCorrectToSave: boolean = false;
@@ -92,7 +99,15 @@ export class AnswerService {
         'No answers found for this user in this test',
       );
     }
-    return answers;
+    const correctAnswerCount =
+      await this.answerRepository.userTestCorrectAnswerCount(userId, testId);
+    const totalQuestionCount = answers.length;
+    const correctAnswerRate = (correctAnswerCount / totalQuestionCount) * 100;
+
+    return {
+      answers,
+      correctAnswerRate,
+    };
   }
 
   async findByTestId(testId: string) {

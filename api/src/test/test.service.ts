@@ -37,7 +37,7 @@ export class TestService {
     return tests;
   }
 
-  private async checkQuestion(testId: string, questionId: string) {
+  async checkQuestion(testId: string, questionId: string) {
     await this.checkById(testId);
     await this.questionService.show(questionId);
     const testQuestion = await this.testRepository.findQuestion(

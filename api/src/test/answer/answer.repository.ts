@@ -85,4 +85,14 @@ export class AnswerRepository {
       },
     });
   }
+
+  async userTestCorrectAnswerCount(userId: string, testId: string) {
+    return this.prisma.answer.count({
+      where: {
+        userId,
+        testId,
+        isCorrect: true,
+      },
+    });
+  }
 }
