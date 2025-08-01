@@ -9,7 +9,7 @@ import { OptionService } from '../../question/option';
 import { TestService } from '../test.service';
 import { OptionLabel } from '@prisma/client';
 import { QuestionService } from '../../question';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../../user';
 @Injectable()
 export class AnswerService {
   constructor(
