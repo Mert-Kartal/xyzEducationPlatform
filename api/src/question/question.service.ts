@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -6,7 +7,7 @@ import {
 import { QuestionRepository } from './question.repository';
 import { UserService } from '../user';
 import { CreateQuestionDto, UpdateQuestionDto } from '../dto';
-import { Field } from '@prisma/client';
+import { Field, Question } from '@prisma/client';
 @Injectable()
 export class QuestionService {
   constructor(
@@ -20,6 +21,12 @@ export class QuestionService {
     }
     return question;
   }
+  private checkLength(questions: Question[]) {
+    if (questions.length !== 4) {
+      throw new BadRequestException('no questions found');
+    }
+    return questions;
+  }
 
   async add(id: string, data: CreateQuestionDto) {
     const user = await this.userService.show(id);
@@ -28,10 +35,7 @@ export class QuestionService {
 
   async list() {
     const questions = await this.questionRepository.index();
-    if (questions.length === 0) {
-      throw new NotFoundException('No questions found');
-    }
-    return questions;
+    this.checkLength(questions);
   }
 
   async show(id: string) {
@@ -40,18 +44,12 @@ export class QuestionService {
 
   async search(field: Field) {
     const questions = await this.questionRepository.search(field);
-    if (questions.length === 0) {
-      throw new NotFoundException('No questions found');
-    }
-    return questions;
+    this.checkLength(questions);
   }
 
   async searchByAuthor(authorId: string) {
     const questions = await this.questionRepository.searchByAuthor(authorId);
-    if (questions.length === 0) {
-      throw new NotFoundException('No questions found for this author');
-    }
-    return questions;
+    this.checkLength(questions);
   }
 
   async edit(userId: string, id: string, data: UpdateQuestionDto) {

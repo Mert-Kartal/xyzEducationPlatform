@@ -65,9 +65,8 @@ export class OptionService {
         return correctOption;
       }
     } else {
-      // TODO 4 şık var doğru şık yanlış yapılmaya çalışılıyor
-      if (!correctOption && question.options.length === 3) {
-        throw new BadRequestException('Every question needs a correct option');
+      if (question.options.length === 4) {
+        throw new BadRequestException('Already has 3 wrong option');
       }
     }
   }

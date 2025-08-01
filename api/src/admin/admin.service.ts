@@ -3,12 +3,14 @@ import { CreateUserDto, UpdateAdminDto } from '../dto';
 import { UserService } from '../user';
 import * as bcrypt from 'bcrypt';
 import { OptionService, QuestionService } from '../question';
+import { TestService } from '../test';
 @Injectable()
 export class AdminService {
   constructor(
     private readonly userService: UserService,
     private readonly questionService: QuestionService,
     private readonly optionService: OptionService,
+    private readonly testService: TestService,
   ) {}
 
   // User
@@ -45,5 +47,10 @@ export class AdminService {
   // Options
   async deleteOption(id: string, optionId: string) {
     return this.optionService.remove(id, optionId);
+  }
+
+  // Test
+  async deleteTest(id: string) {
+    return this.testService.delete(id);
   }
 }

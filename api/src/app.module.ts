@@ -9,6 +9,7 @@ import { AuthModule } from './auth';
 import { SharedModule } from './shared';
 import { AdminModule } from './admin';
 import { QuestionModule } from './question';
+import { TestModule } from './test';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +22,7 @@ import { QuestionModule } from './question';
     SharedModule,
     AdminModule,
     QuestionModule,
+    TestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

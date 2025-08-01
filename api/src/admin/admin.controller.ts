@@ -62,4 +62,10 @@ export class AdminController {
   ) {
     return this.adminService.deleteOption(id, optionId);
   }
+
+  // Test
+  @Delete('tests/:id')
+  async deleteTest(@Param('id', ParseUUIDPipe) id: string) {
+    return this.adminService.deleteTest(id);
+  }
 }

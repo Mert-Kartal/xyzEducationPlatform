@@ -47,7 +47,6 @@ export class QuestionController {
   async searchQuestions(
     @Query('field', new ParseEnumPipe(Field)) field: Field,
   ) {
-    console.log(field);
     return this.questionService.search(field);
   }
 
