@@ -71,6 +71,7 @@ export class TestController {
     return this.testService.delete(id, req.user.userId);
   }
 
+  //Question
   @UseGuards(JwtGuard, RoleGuard)
   @Roles(Role.Professor)
   @Post(':id/questions/:questionId')

@@ -37,7 +37,10 @@ export class AnswerService {
   }
 
   async add(userId: string, testId: string, data: SubmitAnswersDto) {
-    await this.testService.show(testId);
+    const test = await this.testService.show(testId);
+    if (!test.isCompleted) {
+      throw new BadRequestException('You cannot answer this test');
+    }
     const answers = await this.answerRepository.findUserAnswers(testId, userId);
 
     if (answers.length > 0) {
