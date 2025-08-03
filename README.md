@@ -41,7 +41,7 @@ Follow these steps to set up and run the project locally.
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Mert-Kartal/xyzEducationPlatform.git 
 cd xyzEducationPlatform/api 
 ```
 
