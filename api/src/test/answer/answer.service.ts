@@ -7,7 +7,7 @@ import { AnswerRepository } from './answer.repository';
 import { AnswerItemDto, SubmitAnswersDto } from '../../dto';
 import { OptionService } from '../../question/option';
 import { TestService } from '../test.service';
-import { OptionLabel } from '@prisma/client';
+import { OptionLabel, Test, User } from '@prisma/client';
 import { QuestionService } from '../../question';
 import { UserService } from '../../user';
 @Injectable()
@@ -34,6 +34,22 @@ export class AnswerService {
       optionType,
       isCorrect,
     );
+  }
+
+  private async getAndValidateAnswers<T>(
+    answerFetcher: () => Promise<T[]>,
+    notFoundMessage: string,
+    parentExistenceChecker: () => Promise<User | Test | void>,
+  ): Promise<T[]> {
+    await parentExistenceChecker();
+
+    const answers = await answerFetcher();
+
+    if (answers.length === 0) {
+      throw new NotFoundException(notFoundMessage);
+    }
+
+    return answers;
   }
 
   async add(userId: string, testId: string, data: SubmitAnswersDto) {
@@ -95,13 +111,12 @@ export class AnswerService {
   }
 
   async show(userId: string, testId: string) {
-    await this.testService.show(testId);
-    const answers = await this.answerRepository.findUserAnswers(testId, userId);
-    if (answers.length === 0) {
-      throw new NotFoundException(
-        'No answers found for this user in this test',
-      );
-    }
+    const answers = await this.getAndValidateAnswers(
+      () => this.answerRepository.findUserAnswers(testId, userId),
+      'No answers found for this user in this test',
+      () => this.testService.show(testId),
+    );
+
     const correctAnswerCount =
       await this.answerRepository.userTestCorrectAnswerCount(userId, testId);
     const totalQuestionCount = answers.length;
@@ -114,20 +129,20 @@ export class AnswerService {
   }
 
   async findByTestId(testId: string) {
-    await this.testService.show(testId);
-    const answers = await this.answerRepository.findByTestId(testId);
-    if (answers.length === 0) {
-      throw new NotFoundException('No answers found for this test');
-    }
+    const answers = await this.getAndValidateAnswers(
+      () => this.answerRepository.findByTestId(testId),
+      'No answers found for this test',
+      () => this.testService.show(testId),
+    );
     return answers;
   }
 
   async findByUserId(userId: string) {
-    await this.userService.show(userId);
-    const answers = await this.answerRepository.findByUserId(userId);
-    if (answers.length === 0) {
-      throw new NotFoundException('No answers found for this user');
-    }
+    const answers = await this.getAndValidateAnswers(
+      () => this.answerRepository.findByUserId(userId),
+      'No answers found for this user',
+      () => this.userService.show(userId),
+    );
     return answers;
   }
 }
