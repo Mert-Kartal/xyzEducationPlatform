@@ -33,9 +33,16 @@ export class TestController {
     return this.testService.add(req.user.userId, createTestDto);
   }
 
+  @Get('/completed')
+  async listCompleted() {
+    return this.testService.list('true');
+  }
+
+  @UseGuards(JwtGuard, RoleGuard)
+  @Roles(Role.Professor)
   @Get()
-  async list() {
-    return this.testService.list();
+  async list(@Query('completed') completed: 'all' | 'true' | 'false') {
+    return this.testService.list(completed);
   }
 
   @Get('search')

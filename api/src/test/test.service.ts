@@ -57,8 +57,17 @@ export class TestService {
     return test;
   }
 
-  async list() {
-    const tests = await this.testRepository.index();
+  async list(completed: 'all' | 'true' | 'false') {
+    let completedBoolean: boolean | undefined;
+    if (completed === 'true') {
+      completedBoolean = true;
+    } else if (completed === 'false') {
+      completedBoolean = false;
+    } else if (completed === 'all') {
+      completedBoolean = undefined;
+    }
+
+    const tests = await this.testRepository.index(completedBoolean);
     return this.checkLength(tests);
   }
 

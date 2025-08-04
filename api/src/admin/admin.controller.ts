@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { JwtGuard, RoleGuard, Roles } from '../shared';
 import { Role } from '@prisma/client';
@@ -64,6 +65,11 @@ export class AdminController {
   }
 
   // Test
+  @Get('tests')
+  async listTests(@Query('completed') completed: 'all' | 'true' | 'false') {
+    return this.adminService.listTests(completed);
+  }
+
   @Delete('tests/:id')
   async deleteTest(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.deleteTest(id);

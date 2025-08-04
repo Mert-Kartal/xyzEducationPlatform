@@ -15,8 +15,13 @@ export class TestRepository {
     });
   }
 
-  async index() {
-    return this.prisma.test.findMany({});
+  async index(completed?: boolean) {
+    return this.prisma.test.findMany({
+      where: {
+        isCompleted: completed,
+        deletedAt: null,
+      },
+    });
   }
 
   async find(id: string) {

@@ -52,6 +52,10 @@ export class AdminService {
   }
 
   // Test
+  async listTests(completed: 'all' | 'true' | 'false') {
+    return this.testService.list(completed);
+  }
+
   async deleteTest(id: string) {
     return this.testService.delete(id);
   }
